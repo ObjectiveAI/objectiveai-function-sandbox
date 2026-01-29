@@ -114,12 +114,16 @@ async function testAsync(
 }
 
 const openai = new OpenAI({
-  baseURL: `http://${process.env.ADDRESS ?? "localhost"}:${process.env.PORT ?? 5000}`,
+  baseURL:
+    process.env.LOCAL_OBJECTIVEAI_API_BASE ??
+    `http://${process.env.ADDRESS ?? "localhost"}:${process.env.PORT ?? 5000}`,
   apiKey: process.env.OBJECTIVEAI_API_KEY,
 });
 
 async function main(): Promise<void> {
-  const apiProcess = await spawnApiServer();
+  const apiProcess = process.env.LOCAL_OBJECTIVEAI_API_BASE
+    ? null
+    : await spawnApiServer();
 
   test("Function Schema Validation", () =>
     Functions.RemoteFunctionSchema.parse(Function));
@@ -384,7 +388,7 @@ async function main(): Promise<void> {
   }
 
   // kill the API server after tests
-  apiProcess.kill();
+  apiProcess?.kill();
 }
 
 main().catch((err) => {

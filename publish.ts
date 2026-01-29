@@ -103,7 +103,10 @@ async function main(): Promise<void> {
   validateGitHubRemote();
 
   const openai = new OpenAI({
-    baseURL: process.env.OBJECTIVEAI_API_BASE ?? "https://api.objective-ai.io",
+    baseURL:
+      process.env.LOCAL_OBJECTIVEAI_API_BASE ??
+      process.env.OBJECTIVEAI_API_BASE ??
+      "https://api.objective-ai.io",
     apiKey: process.env.OBJECTIVEAI_API_KEY,
   });
   const { owner, repository } = getGitUpstream();
