@@ -1,12 +1,10 @@
-import { Functions } from "objectiveai";
-import OpenAI from "openai";
+import { ObjectiveAI, Functions } from "objectiveai";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import "dotenv/config";
 
-const openai = new OpenAI({
-  baseURL: process.env.OBJECTIVEAI_API_BASE ?? "https://api.objective-ai.io",
-  apiKey: process.env.OBJECTIVEAI_API_KEY,
+const objectiveai = new ObjectiveAI({
+  apiBase: process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING,
 });
 
 type FunctionRef = { owner: string; repository: string; commit: string };
@@ -63,7 +61,7 @@ async function fetchFunctionRecursively(ref: FunctionRef): Promise<void> {
     `Fetching function: ${ref.owner}/${ref.repository}/${ref.commit}`,
   );
   const func = await Functions.retrieve(
-    openai as any,
+    objectiveai,
     ref.owner,
     ref.repository,
     ref.commit,
@@ -108,7 +106,7 @@ async function fetchProfileRecursively(ref: ProfileRef): Promise<void> {
 
   console.log(`Fetching profile: ${ref.owner}/${ref.repository}/${ref.commit}`);
   const profile = await Functions.Profiles.retrieve(
-    openai as any,
+    objectiveai,
     ref.owner,
     ref.repository,
     ref.commit,
@@ -138,8 +136,7 @@ async function fetchProfileRecursively(ref: ProfileRef): Promise<void> {
 
 async function main(): Promise<void> {
   // List all function-profile pairs
-  const { data: pairs } = await Functions.listPairs(openai as any);
-
+  const { data: pairs } = await Functions.listPairs(objectiveai);
   // Randomly select up to 10 pairs
   const shuffled = pairs.sort(() => Math.random() - 0.5);
   const selected = shuffled.slice(0, Math.min(10, shuffled.length));

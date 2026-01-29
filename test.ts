@@ -1,9 +1,8 @@
 import { Function, Profile, ExampleInputs } from "./defs";
-import { Functions } from "objectiveai";
+import { ObjectiveAI, Functions } from "objectiveai";
 import { ExampleInputSchema } from "./example_input";
 import { ChildProcess, spawn } from "child_process";
 import process from "process";
-import OpenAI from "openai";
 import "dotenv/config";
 
 function spawnApiServer(): Promise<ChildProcess> {
@@ -113,15 +112,14 @@ async function testAsync(
   }
 }
 
-const openai = new OpenAI({
-  baseURL:
-    process.env.LOCAL_OBJECTIVEAI_API_BASE ??
+const objectiveai = new ObjectiveAI({
+  apiBase:
+    process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING ??
     `http://${process.env.ADDRESS ?? "localhost"}:${process.env.PORT ?? 5000}`,
-  apiKey: process.env.OBJECTIVEAI_API_KEY,
 });
 
 async function main(): Promise<void> {
-  const apiProcess = process.env.LOCAL_OBJECTIVEAI_API_BASE
+  const apiProcess = process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING
     ? null
     : await spawnApiServer();
 
@@ -291,7 +289,7 @@ async function main(): Promise<void> {
         for (const { value } of ExampleInputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              openai as any,
+              objectiveai,
               {
                 input: value,
                 function: Function,
@@ -324,7 +322,7 @@ async function main(): Promise<void> {
         for (const { value } of ExampleInputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              openai as any,
+              objectiveai,
               {
                 input: value,
                 function: Function,
@@ -360,7 +358,7 @@ async function main(): Promise<void> {
         for (const { value } of ExampleInputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              openai as any,
+              objectiveai,
               {
                 input: value,
                 function: Function,

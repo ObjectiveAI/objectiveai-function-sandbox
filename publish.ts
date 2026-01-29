@@ -1,6 +1,5 @@
 import { ExampleInputs } from "./defs";
-import { Functions, Vector } from "objectiveai";
-import OpenAI from "openai";
+import { ObjectiveAI, Functions, Vector } from "objectiveai";
 import { execSync } from "child_process";
 import "dotenv/config";
 
@@ -65,14 +64,14 @@ function getGitUpstream(): { owner: string; repository: string } {
 }
 
 async function execute(
-  openai: OpenAI,
+  objectiveai: ObjectiveAI,
   input: Functions.Expression.InputValue,
   owner: string,
   repository: string,
   index: number,
 ): Promise<number> {
   const response = await Functions.Executions.remoteFunctionRemoteProfileCreate(
-    openai as any,
+    objectiveai,
     owner,
     repository,
     null,
@@ -102,18 +101,14 @@ async function main(): Promise<void> {
   validateSyncedWithRemote();
   validateGitHubRemote();
 
-  const openai = new OpenAI({
-    baseURL:
-      process.env.LOCAL_OBJECTIVEAI_API_BASE ??
-      process.env.OBJECTIVEAI_API_BASE ??
-      "https://api.objective-ai.io",
-    apiKey: process.env.OBJECTIVEAI_API_KEY,
+  const objectiveai = new ObjectiveAI({
+    apiBase: process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING,
   });
   const { owner, repository } = getGitUpstream();
   const promises = [];
   let i = 1;
   for (const { value } of ExampleInputs) {
-    promises.push(execute(openai, value, owner, repository, i));
+    promises.push(execute(objectiveai, value, owner, repository, i));
     i += 1;
   }
   const costs = await Promise.all(promises);
