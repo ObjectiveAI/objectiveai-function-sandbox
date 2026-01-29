@@ -27,7 +27,7 @@ function validateSyncedWithRemote(): void {
 
   if (local !== remote) {
     throw new Error(
-      `Local branch is not in sync with remote.\nLocal:  ${local}\nRemote: ${remote}\n\nPlease push or pull to sync with the remote.`,
+      `Local branch is not in sync with remote.\nLocal: ${local}\nRemote: ${remote}\n\nPlease push or pull to sync with the remote.`,
     );
   }
 }
