@@ -265,6 +265,7 @@ npm run publish
 - `function.json`
 - `init.ts`
 - `publish.ts`
+- `setPort.ts`
 - `test.ts`
 - `profile.json`
 - `example_input.ts`
