@@ -23,9 +23,11 @@ npm run init
 ```
 
 This single command will:
-1. Clone/update the objectiveai submodule (`git submodule update --init --recursive`)
-2. Install all npm dependencies (`npm install`)
-3. Fetch example functions and profiles
+1. Remove old git history and reinitialize (`rm -rf .git && git init`)
+2. Re-add objectiveai as a proper submodule
+3. Install all npm dependencies (`npm install`)
+4. Create the initial commit
+5. Fetch example functions and profiles
 
 **Run this command NOW, before proceeding to Step 3.**
 
@@ -66,36 +68,6 @@ Think deeply about what function to invent:
 
 Write the plan to `CLAUDE.md`.
 
-## Step 6: Initialize Git Repository
-
-**CRITICAL**: The current repo is `objectiveai-function-sandbox`. You must reinitialize it properly.
-
-### Handling the objectiveai Submodule
-
-**DO NOT** simply copy the `objectiveai` folder and commit it. It MUST remain a git submodule.
-
-To properly reinitialize:
-
-```bash
-# 1. Remove the old git history but keep files
-rm -rf .git
-
-# 2. Remove the submodule directory
-rm -rf objectiveai
-
-# 3. Initialize new repo
-git init
-
-# 4. Re-add objectiveai as a proper submodule
-git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai
-
-# 5. Stage all files
-git add .
-
-# 6. Create initial commit
-git commit -m "Initial commit"
-```
-
 ### Repository Naming
 
 The repository name = the function name. **Do NOT include "objectiveai" or "function" in the name.** Name it like you would name a function:
@@ -105,7 +77,7 @@ The repository name = the function name. **Do NOT include "objectiveai" or "func
 
 **If back-and-forth mode**: Propose the name to the user for approval.
 
-## Step 7: Create the Function in defs.ts
+## Step 6: Create the Function in defs.ts
 
 Replace the existing `Function` export with your new function.
 
@@ -157,7 +129,7 @@ For vector completion tasks:
 - Reuse ensemble/profile patterns from examples (creating optimal profiles is challenging)
 - Consider creating personality prefixes if useful
 
-## Step 8: Create the Profile in defs.ts
+## Step 7: Create the Profile in defs.ts
 
 Replace the existing `Profile` export with a supporting profile.
 
@@ -181,7 +153,7 @@ Match task profiles to function tasks:
 - For sub-function tasks: reference existing profiles by owner/repo/commit
 - For vector completions: define ensemble LLMs and profile weights
 
-## Step 9: Create ExampleInputs in defs.ts
+## Step 8: Create ExampleInputs in defs.ts
 
 Create exactly 10 `ExampleInputs` that are **HIGHLY diverse**:
 
@@ -204,7 +176,7 @@ Create exactly 10 `ExampleInputs` that are **HIGHLY diverse**:
 - Vary the number of items in arrays
 - **At least 1 example MUST have an array with only 1 single item**
 
-## Step 10: Build and Test
+## Step 9: Build and Test
 
 ```bash
 npm run build
@@ -253,7 +225,7 @@ Instead:
 
 Repeat until all tests pass.
 
-## Step 11: Publish to GitHub
+## Step 10: Publish to GitHub
 
 Create the repository on GitHub and push:
 
@@ -262,7 +234,7 @@ git remote add origin git@github.com:{owner}/{repository}.git
 git push -u origin main
 ```
 
-## Step 12: (Optional) Publish to ObjectiveAI Index
+## Step 11: (Optional) Publish to ObjectiveAI Index
 
 To make the Function and Profile discoverable via ObjectiveAI list endpoints:
 
