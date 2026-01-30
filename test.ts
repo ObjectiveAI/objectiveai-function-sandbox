@@ -5,6 +5,8 @@ import { ChildProcess, spawn } from "child_process";
 import process from "process";
 import "dotenv/config";
 
+const serverPrint = process.argv.includes("--server-print");
+
 function spawnApiServer(): Promise<ChildProcess> {
   return new Promise((resolve, reject) => {
     const apiProcess = spawn(
@@ -55,6 +57,9 @@ function spawnApiServer(): Promise<ChildProcess> {
 
     const onData = (data: Buffer) => {
       const output = data.toString();
+      if (serverPrint) {
+        process.stdout.write(output);
+      }
       if (!resolved && output.includes("Running `")) {
         resolved = true;
         clearTimeout(timeout);

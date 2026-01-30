@@ -6,7 +6,9 @@
     "init": "test -f examples/examples.json && echo 'Already initialized, skipping' || (rm -rf .git && rm -rf objectiveai && git init && git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai && git submodule update --init --recursive && npm install && git add . && git commit -m \"Initial commit\" && ts-node setPort.ts && ts-node init.ts)",
     "start": "ts-node main.ts",
     "test": "ts-node test.ts",
+    "test-server-print": "ts-node test.ts --server-print",
     "build": "ts-node build.ts && npm run test",
+    "build-server-print": "ts-node build.ts && npm run test-server-print",
     "publish": "npm run build && ts-node publish.ts"
   },
   "type": "commonjs",
