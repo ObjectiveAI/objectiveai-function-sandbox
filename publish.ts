@@ -105,20 +105,7 @@ async function main(): Promise<void> {
     apiBase: process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING,
   });
   const { owner, repository } = getGitUpstream();
-  const promises = [];
-  let i = 1;
-  for (const { value } of ExampleInputs) {
-    promises.push(execute(objectiveai, value, owner, repository, i));
-    i += 1;
-  }
-  const costs = await Promise.all(promises);
-  const totalCost = costs.reduce((a, b) => a + b, 0);
-  const totalCostFormatted = new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 6,
-  }).format(totalCost);
-  console.log(`Executions Cost: ${totalCostFormatted}`);
+  execute(objectiveai, ExampleInputs[0].value, owner, repository, 1);
   console.log("Function & Profile published successfully.");
 }
 
