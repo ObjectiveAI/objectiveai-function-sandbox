@@ -201,9 +201,12 @@ Because the server runs locally from the `objectiveai` submodule, **you are free
 
 For example, you can:
 1. Add `println!` or `dbg!` statements in `objectiveai/objectiveai-api/src/...`
-2. Run `npm run build` again
-3. See your debug output in the test results
-4. Use this to understand why your function is failing
+2. Run `npm install` to rebuild the submodule with your changes
+3. Run `npm run build` again
+4. See your debug output in the test results
+5. Use this to understand why your function is failing
+
+**IMPORTANT**: After modifying any code in the `objectiveai` submodule, you MUST run `npm install` before `npm run build` to pick up the changes.
 
 This is a powerful debugging technique. Use it.
 
