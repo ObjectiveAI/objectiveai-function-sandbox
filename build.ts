@@ -1,5 +1,6 @@
 import { Ensemble, EnsembleLlm, Functions } from "objectiveai";
-import { Function, Profile } from "./defs";
+import { Function } from "./function";
+import { Profile } from "./profile";
 import { writeFileSync } from "fs";
 
 function buildFunction(): void {
