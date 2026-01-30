@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "main.ts",
   "scripts": {
-    "init": "ts-node init.ts",
+    "init": "git submodule update --init --recursive && npm install && ts-node init.ts",
     "start": "ts-node main.ts",
     "test": "ts-node test.ts",
     "build": "ts-node build.ts && npm run test",

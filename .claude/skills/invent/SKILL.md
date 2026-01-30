@@ -14,24 +14,27 @@ Ask the user:
 
 **⚠️ VERY IMPORTANT ⚠️**
 
-**YOU MUST EXECUTE THESE 3 COMMANDS BEFORE DOING ANYTHING ELSE.**
+**YOU MUST EXECUTE THIS COMMAND BEFORE DOING ANYTHING ELSE.**
 
-**DO NOT skip this step. DO NOT explore the objectiveai submodule first. DO NOT read any files in objectiveai/ before running these commands. The submodule will be EMPTY or OUTDATED if you skip this step.**
+**DO NOT skip this step. DO NOT explore the objectiveai submodule first. DO NOT read any files in objectiveai/ before running this command. The submodule will be EMPTY or OUTDATED if you skip this step.**
 
 ```bash
-git submodule update --init --recursive
-npm install
 npm run init
 ```
 
-**Run these commands NOW, before proceeding to Step 3.**
+This single command will:
+1. Clone/update the objectiveai submodule (`git submodule update --init --recursive`)
+2. Install all npm dependencies (`npm install`)
+3. Fetch example functions and profiles
 
-Without running these commands:
+**Run this command NOW, before proceeding to Step 3.**
+
+Without running this command:
 - The `objectiveai/` directory will be empty or missing files
 - You will not be able to learn how ObjectiveAI works
 - All subsequent steps will fail
 
-**Execute the 3 commands above. This is not optional.**
+**Execute `npm run init`. This is not optional.**
 
 ## Step 3: Learn ObjectiveAI
 
