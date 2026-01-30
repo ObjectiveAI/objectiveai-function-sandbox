@@ -35,7 +35,7 @@ export type CompiledTaskExpectation = z.infer<
 
 export const ExampleInputSchema = z.object({
   value: Functions.Expression.InputValueSchema,
-  compiledTasks: z.array(CompiledTaskExpectationSchema),
+  compiledTasks: Functions.CompiledTasksSchema,
   outputLength: z
     .uint32()
     .nullable()
