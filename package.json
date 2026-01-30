@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "main.ts",
   "scripts": {
-    "init": "test -f examples/examples.json && echo 'Already initialized, skipping' || (rm -rf .git && rm -rf objectiveai && git init && git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai && git submodule update --init --recursive && npm install && git add . && git commit -m \"Initial commit\" && ts-node readonly/init.ts)",
+    "init": "test -f examples/examples.json && echo 'Already initialized, skipping' || (rm -rf .git && rm -rf objectiveai && git init && git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai && git submodule update --init --recursive && npm install && git add . && git commit -m \"Initial commit\" && ts-node init.ts)",
     "start": "ts-node main.ts",
-    "build": "ts-node readonly/test.ts && ts-node readonly/build.ts",
-    "publish": "npm run build && ts-node readonly/publish.ts"
+    "build": "ts-node test.ts && ts-node build.ts",
+    "publish": "npm run build && ts-node publish.ts"
   },
   "type": "commonjs",
   "devDependencies": {
