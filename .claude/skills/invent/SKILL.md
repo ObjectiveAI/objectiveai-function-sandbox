@@ -236,12 +236,7 @@ Repeat until all tests pass.
 
 ## Step 10: Publish to GitHub
 
-Create the repository on GitHub and push:
-
-```bash
-git remote add origin git@github.com:{owner}/{repository}.git
-git push -u origin main
-```
+Use the GitHub CLI (`gh`) to create the repository with the function name from `CLAUDE.md` and push.
 
 ## Step 11: (Optional) Publish to ObjectiveAI Index
 
