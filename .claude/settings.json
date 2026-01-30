@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(./.claude/plans/**)",
+      "Edit(./objectiveai/objectiveai-api/src/**)",
+      "Edit(./objectiveai/objectiveai-rs/src/**)",
+      "Edit(./objectiveai/objectiveai-rs-wasm-js/src/**)",
+      "Edit(./function.ts)",
+      "Edit(./inputs.ts)",
+      "Edit(./profile.ts)",
+      "Edit(./README.md)",
+      "Skill",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Edit(./.claude/settings.json)",
+      "Edit(./.claude/skills/**)",
+      "Edit(./examples/**)",
+      "Edit(./node_modules/**)",
+      "Edit(./objectiveai/*)",
+      "Edit(./objectiveai/objectiveai-api/*",
+      "Edit(./objectiveai/objectiveai-github-discord-notifier/**)",
+      "Edit(./objectiveai/objectiveai-js/**)",
+      "Edit(./objectiveai/objectiveai-rs/*)",
+      "Edit(./objectiveai/objectiveai-rs-wasm-js/*)",
+      "Edit(./objectiveai/objectiveai-web/**)",
+      "Edit(./objectiveai/target/**)",
+      "Edit(./.env)",
+      "Edit(./.gitmodules)",
+      "Edit(./build.ts)",
+      "Edit(./example_input.ts)",
+      "Edit(./function.json)",
+      "Edit(./init.ts)",
+      "Edit(./package-lock.json)",
+      "Edit(./package.json)",
+      "Edit(./profile.json)",
+      "Edit(./publish.ts)",
+      "Edit(./setPort.ts)",
+      "Edit(./test.ts)",
+      "Edit(./tsconfig.json)",
+      "NotebookEdit",
+      "Write"
+    ]
+  }
+}
