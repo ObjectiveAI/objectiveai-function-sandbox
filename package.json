@@ -6,7 +6,7 @@
     "init": "ts-node init.ts",
     "start": "ts-node main.ts",
     "test": "ts-node test.ts",
-    "build": "npm run test && ts-node build.ts",
+    "build": "ts-node build.ts && npm run test",
     "publish": "npm run build && ts-node publish.ts"
   },
   "type": "commonjs",
