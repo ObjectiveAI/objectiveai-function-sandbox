@@ -214,6 +214,24 @@ This will:
 
 ### If Tests Fail
 
+**⚠️ YOU MUST MAKE THESE TESTS PASS. THIS IS NOT OPTIONAL. ⚠️**
+
+**Test failures are NEVER due to a missing API key. NO API KEY IS NEEDED FOR TESTS.**
+
+The tests run a **local server** from the objectiveai submodule. No external APIs are called. No API key is required. If tests fail, it is 100% due to a bug in YOUR function or profile definition. Do not blame missing credentials. Do not suggest the user needs an API key. Do not give up.
+
+### Debugging with Print Statements
+
+Because the server runs locally from the `objectiveai` submodule, **you are free to add debug print statements directly into the Rust code** to understand what's happening.
+
+For example, you can:
+1. Add `println!` or `dbg!` statements in `objectiveai/objectiveai-api/src/...`
+2. Run `npm run build` again
+3. See your debug output in the test results
+4. Use this to understand why your function is failing
+
+This is a powerful debugging technique. Use it.
+
 **DO NOT simply change example inputs to ones that pass.**
 
 Instead:
@@ -221,6 +239,14 @@ Instead:
 2. This indicates a bug in the function logic
 3. Fix the function, not the examples
 4. If it appears to be a bug in ObjectiveAI itself, instruct the user to report it in the [ObjectiveAI Discord](https://discord.gg/gbNFHensby)
+
+**YOU ARE RESPONSIBLE FOR MAKING ALL TESTS PASS.**
+
+- Do not stop until every test passes
+- Do not ask the user to fix it for you
+- Do not claim it's an environment issue
+- Do not claim it's a missing API key (there is no API key needed)
+- Analyze the error, fix your code, and try again
 
 Repeat until all tests pass.
 
