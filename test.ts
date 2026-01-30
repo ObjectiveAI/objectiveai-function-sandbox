@@ -1,96 +1,9 @@
-import { Function, Profile, ExampleInputs } from "./defs";
-import { ObjectiveAI, Functions } from "objectiveai";
+import { Function } from "./function";
+import { Profile } from "./profile";
+import { Inputs } from "./inputs";
+import { Functions } from "objectiveai";
 import { ExampleInputSchema } from "./example_input";
-import { ChildProcess, spawn } from "child_process";
-import process from "process";
-import "dotenv/config";
-
-const serverPrint = process.argv.includes("--server-print");
-
-function spawnApiServer(): Promise<ChildProcess> {
-  return new Promise((resolve, reject) => {
-    const apiProcess = spawn(
-      "cargo",
-      ["run", "--manifest-path", "./objectiveai/objectiveai-api/Cargo.toml"],
-      {
-        detached: false,
-        stdio: ["inherit", "pipe", "pipe"],
-      },
-    );
-
-    const killApiProcess = () => {
-      if (!apiProcess.killed) {
-        try {
-          process.kill(apiProcess.pid as number);
-        } catch {}
-      }
-    };
-
-    process.on("exit", killApiProcess);
-    process.on("SIGINT", () => {
-      killApiProcess();
-      process.exit(130);
-    });
-    process.on("SIGTERM", () => {
-      killApiProcess();
-      process.exit(143);
-    });
-    process.on("uncaughtException", (err) => {
-      killApiProcess();
-      throw err;
-    });
-    process.on("unhandledRejection", (err) => {
-      killApiProcess();
-      throw err;
-    });
-
-    let resolved = false;
-    const timeout = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        killApiProcess();
-        reject(
-          new Error("Timeout: API server did not start within 300 seconds"),
-        );
-      }
-    }, 300000);
-
-    const onData = (data: Buffer) => {
-      const output = data.toString();
-      if (serverPrint) {
-        process.stdout.write(output);
-      }
-      if (!resolved && output.includes("Running `")) {
-        resolved = true;
-        clearTimeout(timeout);
-        resolve(apiProcess);
-      }
-    };
-
-    apiProcess.stdout?.on("data", onData);
-    apiProcess.stderr?.on("data", onData);
-
-    apiProcess.on("error", (err) => {
-      if (!resolved) {
-        resolved = true;
-        clearTimeout(timeout);
-        reject(err);
-      }
-    });
-
-    apiProcess.on("exit", (code) => {
-      if (!resolved) {
-        resolved = true;
-        clearTimeout(timeout);
-        reject(
-          new Error(
-            `API server exited with code ${code} before becoming ready`,
-          ),
-        );
-      }
-    });
-  });
-}
+import { spawnApiServer, LocalObjectiveAI } from "./apiServer";
 
 function test(title: string, testFunction: () => void): boolean {
   try {
@@ -117,16 +30,66 @@ async function testAsync(
   }
 }
 
-const objectiveai = new ObjectiveAI({
-  apiBase:
-    process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING ??
-    `http://${process.env.ADDRESS ?? "localhost"}:${process.env.PORT ?? 5000}`,
-});
+function compiledTasksEqual(
+  a: Functions.CompiledTask,
+  b: Functions.CompiledTask,
+): boolean {
+  if (a === null) {
+    return b === null;
+  } else if (Array.isArray(a)) {
+    return (
+      b !== null &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((subTask, index) =>
+        compiledTasksEqual(subTask, (b as Functions.CompiledTask[])[index]),
+      )
+    );
+  } else if (a.type === "scalar.function") {
+    return (
+      b !== null &&
+      !Array.isArray(b) &&
+      b.type === "scalar.function" &&
+      b.owner === a.owner &&
+      b.repository === a.repository &&
+      b.commit === a.commit &&
+      JSON.stringify(a.input) === JSON.stringify(b.input)
+    );
+  } else if (a.type === "vector.function") {
+    return (
+      b !== null &&
+      !Array.isArray(b) &&
+      b.type === "vector.function" &&
+      b.owner === a.owner &&
+      b.repository === a.repository &&
+      b.commit === a.commit &&
+      JSON.stringify(a.input) === JSON.stringify(b.input)
+    );
+  } else if (a.type === "vector.completion") {
+    return b !== null &&
+      !Array.isArray(b) &&
+      b.type === "vector.completion" &&
+      JSON.stringify(a.messages) === JSON.stringify(b.messages) &&
+      JSON.stringify(a.responses) === JSON.stringify(b.responses) &&
+      a.tools === undefined
+      ? b.tools === undefined
+      : (b as Functions.VectorCompletionTask).tools !== undefined &&
+          (a as Functions.VectorCompletionTask).tools!.length ===
+            (b as Functions.VectorCompletionTask).tools!.length &&
+          (a as Functions.VectorCompletionTask).tools!.every(
+            (tool, index) =>
+              JSON.stringify(tool) ===
+              JSON.stringify(
+                (b as Functions.VectorCompletionTask).tools![index],
+              ),
+          );
+  } else {
+    return false;
+  }
+}
 
 async function main(): Promise<void> {
-  const apiProcess = process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING
-    ? null
-    : await spawnApiServer();
+  const apiProcess = await spawnApiServer();
 
   test("Function Schema Validation", () =>
     Functions.RemoteFunctionSchema.parse(Function));
@@ -135,23 +98,23 @@ async function main(): Promise<void> {
     Functions.RemoteProfileSchema.parse(Profile));
 
   test("Example Inputs Schema Validation", () => {
-    for (const input of ExampleInputs) {
+    for (const input of Inputs) {
       ExampleInputSchema.parse(input);
     }
   });
 
   test("Example Inputs Length Validation", () => {
-    if (ExampleInputs.length < 10 || ExampleInputs.length > 100) {
+    if (Inputs.length < 10 || Inputs.length > 100) {
       throw new Error(
-        `Expected between 10 and 100 example inputs, but got ${ExampleInputs.length}`,
+        `Expected between 10 and 100 example inputs, but got ${Inputs.length}`,
       );
     }
   });
 
   test("Example Inputs Validation", () => {
-    for (const { value, outputLength } of ExampleInputs) {
-      const result = Functions.validateFunctionInput(Function, value);
-      if (!result) {
+    for (const { value, compiledTasks, outputLength } of Inputs) {
+      const _ = Functions.CompiledTasksSchema.parse(compiledTasks);
+      if (!Functions.validateFunctionInput(Function, value)) {
         throw new Error(
           `validation against Function's \`input_schema\` failed for input: ${JSON.stringify(value)}`,
         );
@@ -177,45 +140,23 @@ async function main(): Promise<void> {
   });
 
   test("Compiled Task Validation", () => {
-    for (const {
-      value,
-      compiledTasks: compiledTaskExpectations,
-    } of ExampleInputs) {
+    for (const { value, compiledTasks: expectedCompiledTasks } of Inputs) {
       const compiledTasks = Functions.compileFunctionTasks(Function, value);
-      if (compiledTasks.length !== compiledTaskExpectations.length) {
+      if (compiledTasks.length !== expectedCompiledTasks.length) {
         throw new Error(
-          `number of compiled tasks (${compiledTasks.length}) does not match number of compiled task expectations (${compiledTaskExpectations.length}) for input: ${JSON.stringify(value)}`,
+          `number of compiled tasks (${compiledTasks.length}) does not match number of compiled task expectations (${expectedCompiledTasks.length}) for input: ${JSON.stringify(value)}`,
         );
       }
       for (let i = 0; i < compiledTasks.length; i++) {
         const compiledTask = compiledTasks[i];
-        const compiledTaskExpectation = compiledTaskExpectations[i];
-        if (compiledTask === null) {
-          if (compiledTaskExpectation.skipped === false) {
-            throw new Error(
-              `compiled task is null but compiled task expectation indicates it should not be skipped for input: ${JSON.stringify(value)}`,
-            );
-          }
-        } else if (Array.isArray(compiledTask)) {
-          if (compiledTask.length !== compiledTaskExpectation.mapped) {
-            throw new Error(
-              `number of mapped sub-tasks (${compiledTask.length}) does not match compiled task expectation mapped (${compiledTaskExpectation.mapped}) for input: ${JSON.stringify(value)}`,
-            );
-          }
-          for (const subTask of compiledTask) {
-            if (subTask.type !== compiledTaskExpectation.type) {
-              throw new Error(
-                `mapped sub-task type (${subTask.type}) does not match compiled task expectation type (${compiledTaskExpectation.type}) for input: ${JSON.stringify(value)}`,
-              );
-            }
-          }
-        } else if (compiledTask.type !== compiledTaskExpectation.type) {
+        const expectedCompiledTask = expectedCompiledTasks[i];
+        if (!compiledTasksEqual(compiledTask, expectedCompiledTask)) {
           throw new Error(
-            `compiled task type (${compiledTask.type}) does not match compiled task expectation type (${compiledTaskExpectation.type}) for input: ${JSON.stringify(value)}`,
-          );
-        } else if (compiledTaskExpectation.mapped !== null) {
-          throw new Error(
-            `compiled task is not mapped but compiled task expectation indicates it should be mapped for input: ${JSON.stringify(value)}`,
+            `compiled task does not match expected compiled task for input: ${JSON.stringify(
+              value,
+            )}\n\nExpected: ${JSON.stringify(
+              expectedCompiledTask,
+            )}\n\nGot: ${JSON.stringify(compiledTask)}`,
           );
         }
       }
@@ -224,7 +165,7 @@ async function main(): Promise<void> {
 
   if (Function.type === "vector.function") {
     test("Vector Function Validation", () => {
-      for (const { value, outputLength } of ExampleInputs) {
+      for (const { value, outputLength } of Inputs) {
         // Validate output length
         const compiledOutputLength = Functions.compileFunctionOutputLength(
           Function,
@@ -291,10 +232,10 @@ async function main(): Promise<void> {
       "Vector Function Execution Validation (Default Strategy)",
       async () => {
         const promises = [];
-        for (const { value } of ExampleInputs) {
+        for (const { value } of Inputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              objectiveai,
+              LocalObjectiveAI,
               {
                 input: value,
                 function: Function,
@@ -305,15 +246,15 @@ async function main(): Promise<void> {
           );
         }
         const results = await Promise.all(promises);
-        for (let i = 0; i < ExampleInputs.length; i++) {
+        for (let i = 0; i < Inputs.length; i++) {
           const result = results[i];
           if (result.error !== null) {
             throw new Error(
-              `function execution failed for input: ${JSON.stringify(ExampleInputs[i].value)} with error: ${result.error}`,
+              `function execution failed for input: ${JSON.stringify(Inputs[i].value)} with error: ${result.error}`,
             );
           } else if (result.tasks_errors) {
             throw new Error(
-              `function execution had task errors for input: ${JSON.stringify(ExampleInputs[i].value)}`,
+              `function execution had task errors for input: ${JSON.stringify(Inputs[i].value)}`,
             );
           }
         }
@@ -324,10 +265,10 @@ async function main(): Promise<void> {
       "Vector Function Execution Validation (SwissSystem Strategy)",
       async () => {
         const promises = [];
-        for (const { value } of ExampleInputs) {
+        for (const { value } of Inputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              objectiveai,
+              LocalObjectiveAI,
               {
                 input: value,
                 function: Function,
@@ -341,15 +282,15 @@ async function main(): Promise<void> {
           );
         }
         const results = await Promise.all(promises);
-        for (let i = 0; i < ExampleInputs.length; i++) {
+        for (let i = 0; i < Inputs.length; i++) {
           const result = results[i];
           if (result.error !== null) {
             throw new Error(
-              `function execution failed for input: ${JSON.stringify(ExampleInputs[i].value)} with error: ${result.error}`,
+              `function execution failed for input: ${JSON.stringify(Inputs[i].value)} with error: ${result.error}`,
             );
           } else if (result.tasks_errors) {
             throw new Error(
-              `function execution had task errors for input: ${JSON.stringify(ExampleInputs[i].value)}`,
+              `function execution had task errors for input: ${JSON.stringify(Inputs[i].value)}`,
             );
           }
         }
@@ -360,10 +301,10 @@ async function main(): Promise<void> {
       "Scalar Function Execution Validation (Default Strategy)",
       async () => {
         const promises = [];
-        for (const { value } of ExampleInputs) {
+        for (const { value } of Inputs) {
           promises.push(
             Functions.Executions.inlineFunctionInlineProfileCreate(
-              objectiveai,
+              LocalObjectiveAI,
               {
                 input: value,
                 function: Function,
@@ -374,15 +315,15 @@ async function main(): Promise<void> {
           );
         }
         const results = await Promise.all(promises);
-        for (let i = 0; i < ExampleInputs.length; i++) {
+        for (let i = 0; i < Inputs.length; i++) {
           const result = results[i];
           if (result.error !== null) {
             throw new Error(
-              `function execution failed for input: ${JSON.stringify(ExampleInputs[i].value)} with error: ${result.error}`,
+              `function execution failed for input: ${JSON.stringify(Inputs[i].value)} with error: ${result.error}`,
             );
           } else if (result.tasks_errors) {
             throw new Error(
-              `function execution had task errors for input: ${JSON.stringify(ExampleInputs[i].value)}`,
+              `function execution had task errors for input: ${JSON.stringify(Inputs[i].value)}`,
             );
           }
         }
