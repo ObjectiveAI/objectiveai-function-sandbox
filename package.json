@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "main.ts",
   "scripts": {
-    "init": "test -f examples/examples.json && echo 'Already initialized, skipping' || (rm -rf .git && rm -rf objectiveai && git init && git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai && git submodule update --init --recursive && npm install && git add . && git commit -m \"Initial commit\" && ts-node init.ts)",
-    "start": "ts-node main.ts",
+    "init": "ORIGIN=$(git remote get-url origin 2>/dev/null); if [ \"$ORIGIN\" = \"https://github.com/ObjectiveAI/objectiveai-function-sandbox\" ]; then rm -rf .git && rm -rf objectiveai && git init && git submodule add https://github.com/ObjectiveAI/objectiveai objectiveai && git submodule update --init --recursive && git add . && git commit -m \"Initial commit\"; fi && npm install && ts-node init.ts",
     "build": "ts-node test.ts && ts-node build.ts",
     "publish": "npm run build && ts-node publish.ts"
   },
