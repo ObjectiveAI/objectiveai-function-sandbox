@@ -2,18 +2,6 @@
 
 This skill guides you through inventing a new ObjectiveAI Function and Profile pair.
 
-## Step 0: Initialize the Environment (REQUIRED FIRST)
-
-**Before doing anything else, including exploring the objectiveai submodule**, run these commands:
-
-```bash
-git submodule update --init --recursive
-npm install
-npm run init
-```
-
-This ensures the submodule is properly cloned and all dependencies are ready.
-
 ## Step 1: Choose Mode
 
 Ask the user:
@@ -22,13 +10,36 @@ Ask the user:
 - **Back-and-forth**: You will engage with the user on ideas, propose names, and iterate together.
 - **Automated**: You will come up with the idea and implement it entirely autonomously.
 
-## Step 2: Learn ObjectiveAI
+## Step 2: Initialize the Environment
+
+**⚠️ VERY IMPORTANT ⚠️**
+
+**YOU MUST EXECUTE THESE 3 COMMANDS BEFORE DOING ANYTHING ELSE.**
+
+**DO NOT skip this step. DO NOT explore the objectiveai submodule first. DO NOT read any files in objectiveai/ before running these commands. The submodule will be EMPTY or OUTDATED if you skip this step.**
+
+```bash
+git submodule update --init --recursive
+npm install
+npm run init
+```
+
+**Run these commands NOW, before proceeding to Step 3.**
+
+Without running these commands:
+- The `objectiveai/` directory will be empty or missing files
+- You will not be able to learn how ObjectiveAI works
+- All subsequent steps will fail
+
+**Execute the 3 commands above. This is not optional.**
+
+## Step 3: Learn ObjectiveAI
 
 Investigate the `objectiveai` submodule to familiarize yourself with what ObjectiveAI Functions and Profiles are:
 - Read key files in `objectiveai/objectiveai-js/` and `objectiveai/objectiveai-rs/`
 - Understand the structure of Functions (scalar vs vector) and Profiles (task profiles, ensembles)
 
-## Step 3: Study Examples
+## Step 4: Study Examples
 
 1. Read `examples/examples.json` to see the root function-profile pairs
 2. For each pair, open and study:
@@ -38,7 +49,7 @@ Investigate the `objectiveai` submodule to familiarize yourself with what Object
 4. If any profile contains sub-profiles, you may open those sub-profile files
 5. Optionally, fetch README.md or CLAUDE.md from GitHub for example repos to gather additional context
 
-## Step 4: Invent the Function
+## Step 5: Invent the Function
 
 Think deeply about what function to invent:
 - **Scalar Function**: For scoring (outputs a single number in [0, 1])
@@ -52,7 +63,7 @@ Think deeply about what function to invent:
 
 Write the plan to `CLAUDE.md`.
 
-## Step 5: Initialize Git Repository
+## Step 6: Initialize Git Repository
 
 **CRITICAL**: The current repo is `objectiveai-function-sandbox`. You must reinitialize it properly.
 
@@ -91,7 +102,7 @@ The repository name = the function name. **Do NOT include "objectiveai" or "func
 
 **If back-and-forth mode**: Propose the name to the user for approval.
 
-## Step 6: Create the Function in defs.ts
+## Step 7: Create the Function in defs.ts
 
 Replace the existing `Function` export with your new function.
 
@@ -143,7 +154,7 @@ For vector completion tasks:
 - Reuse ensemble/profile patterns from examples (creating optimal profiles is challenging)
 - Consider creating personality prefixes if useful
 
-## Step 7: Create the Profile in defs.ts
+## Step 8: Create the Profile in defs.ts
 
 Replace the existing `Profile` export with a supporting profile.
 
@@ -167,7 +178,7 @@ Match task profiles to function tasks:
 - For sub-function tasks: reference existing profiles by owner/repo/commit
 - For vector completions: define ensemble LLMs and profile weights
 
-## Step 8: Create ExampleInputs in defs.ts
+## Step 9: Create ExampleInputs in defs.ts
 
 Create exactly 10 `ExampleInputs` that are **HIGHLY diverse**:
 
@@ -190,7 +201,7 @@ Create exactly 10 `ExampleInputs` that are **HIGHLY diverse**:
 - Vary the number of items in arrays
 - **At least 1 example MUST have an array with only 1 single item**
 
-## Step 9: Build and Test
+## Step 10: Build and Test
 
 ```bash
 npm run build
@@ -213,7 +224,7 @@ Instead:
 
 Repeat until all tests pass.
 
-## Step 10: Publish to GitHub
+## Step 11: Publish to GitHub
 
 Create the repository on GitHub and push:
 
@@ -222,7 +233,7 @@ git remote add origin git@github.com:{owner}/{repository}.git
 git push -u origin main
 ```
 
-## Step 11: (Optional) Publish to ObjectiveAI Index
+## Step 12: (Optional) Publish to ObjectiveAI Index
 
 To make the Function and Profile discoverable via ObjectiveAI list endpoints:
 
