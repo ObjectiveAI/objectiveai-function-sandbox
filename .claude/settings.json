@@ -1,6 +1,12 @@
 {
   "permissions": {
     "allow": [
+      "Bash(npm run init)",
+      "Bash(npm run build)",
+      "Bash(npm install)",
+      "Bash(git submodule update *)",
+      "Bash(ls*)",
+      "Bash(cd)",
       "Edit(./.claude/plans/**)",
       "Edit(./objectiveai/objectiveai-api/src/**)",
       "Edit(./objectiveai/objectiveai-rs/src/**)",
@@ -9,24 +15,30 @@
       "Edit(./inputs.ts)",
       "Edit(./profile.ts)",
       "Edit(./README.md)",
+      "ExitPlanMode",
       "Skill",
       "WebFetch",
-      "WebSearch"
+      "WebSearch",
+      "Write(./.claude/plans/**.md)"
     ],
     "deny": [
       "Edit(./.claude/settings.json)",
+      "Edit(./.claude/agents/**)",
+      "Edit(./.claude/plans/.gitkeep)",
       "Edit(./.claude/skills/**)",
       "Edit(./examples/**)",
       "Edit(./node_modules/**)",
       "Edit(./objectiveai/*)",
-      "Edit(./objectiveai/objectiveai-api/*",
+      "Edit(./objectiveai/objectiveai-api/*)",
       "Edit(./objectiveai/objectiveai-github-discord-notifier/**)",
       "Edit(./objectiveai/objectiveai-js/**)",
       "Edit(./objectiveai/objectiveai-rs/*)",
       "Edit(./objectiveai/objectiveai-rs-wasm-js/*)",
+      "Edit(./objectiveai/objectiveai-rs-wasm-js/pkg-nodejs/**)",
       "Edit(./objectiveai/objectiveai-web/**)",
       "Edit(./objectiveai/target/**)",
       "Edit(./.env)",
+      "Edit(./.gitignore)",
       "Edit(./.gitmodules)",
       "Edit(./build.ts)",
       "Edit(./example_input.ts)",
@@ -40,7 +52,12 @@
       "Edit(./test.ts)",
       "Edit(./tsconfig.json)",
       "NotebookEdit",
-      "Write"
+      "Write(./.claude/*)",
+      "Write(./.claude/skills/**)",
+      "Write(./examples/**)",
+      "Write(./node_modules/**)",
+      "Write(./objectiveai/**)",
+      "Write(./*)"
     ]
   }
 }
