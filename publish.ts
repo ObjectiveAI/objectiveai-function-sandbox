@@ -1,4 +1,4 @@
-import { ExampleInputs } from "./defs";
+import { Inputs } from "./inputs";
 import { ObjectiveAI, Functions, Vector } from "objectiveai";
 import { execSync } from "child_process";
 import "dotenv/config";
@@ -105,7 +105,7 @@ async function main(): Promise<void> {
     apiBase: process.env.ONLY_SET_IF_YOU_KNOW_WHAT_YOURE_DOING,
   });
   const { owner, repository } = getGitUpstream();
-  execute(objectiveai, ExampleInputs[0].value, owner, repository, 1);
+  execute(objectiveai, Inputs[0].value, owner, repository, 1);
   console.log("Function & Profile published successfully.");
 }
 
