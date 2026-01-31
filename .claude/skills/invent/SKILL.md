@@ -8,11 +8,7 @@ This skill guides you through inventing a new ObjectiveAI Function and Profile p
 
 Do not skip steps. Do not reorder steps. Complete each step before moving to the next.
 
-## Step 1: Initialize
-
-Run `npm run init`.
-
-## Step 2: Check Mode
+## Step 1: Check Mode
 
 Read `.claude/plans/mode.md`.
 
@@ -22,6 +18,10 @@ Read `.claude/plans/mode.md`.
   - Update `mode.md` with the selected mode: either `back-and-forth` or `autonomous`.
 
 - If the file already contains a mode, proceed with that mode.
+
+## Step 2: Initialize
+
+Run `npm run init`.
 
 ## Step 3: Learn ObjectiveAI
 
