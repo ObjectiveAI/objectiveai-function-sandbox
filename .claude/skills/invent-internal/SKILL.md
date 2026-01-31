@@ -8,6 +8,12 @@ Before this skill is activated:
 - `.claude/plans/mode.md` contains the selected mode (back-and-forth or autonomous)
 - `.claude/plans/function.md` contains the function plan with repository name
 
+## Execution
+
+**Create a TODO list containing Steps 1-5 and execute them in precise order.**
+
+Do not skip steps. Do not reorder steps. Complete each step before moving to the next.
+
 ## Step 1: Create the Function in function.ts
 
 Edit `function.ts` to implement the function from the plan.
