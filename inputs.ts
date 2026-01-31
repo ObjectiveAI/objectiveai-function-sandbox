@@ -1,4 +1,4 @@
-import { ExampleInput } from "./example_input";
+import { ExampleInput } from "./exampleInput";
 
 export const Inputs: ExampleInput[] = [
   {

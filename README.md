@@ -36,7 +36,7 @@ npm run publish   # (Optional) Index on ObjectiveAI
 ├── test.ts           # Validates and tests everything (readonly)
 ├── init.ts           # Fetches example functions/profiles (readonly)
 ├── publish.ts        # Publishes to ObjectiveAI index (readonly)
-├── example_input.ts  # ExampleInput type definition (readonly)
+├── exampleInput.ts  # ExampleInput type definition (readonly)
 ├── function.json     # Generated Function output
 ├── profile.json      # Generated Profile output
 ├── examples/         # Downloaded example functions/profiles

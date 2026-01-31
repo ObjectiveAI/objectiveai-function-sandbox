@@ -57,7 +57,7 @@
       "Edit(./.gitignore)",
       "Edit(./.gitmodules)",
       "Edit(./build.ts)",
-      "Edit(./example_input.ts)",
+      "Edit(./exampleInput.ts)",
       "Edit(./function.json)",
       "Edit(./init.ts)",
       "Edit(./package-lock.json)",

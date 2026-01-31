@@ -2,7 +2,7 @@ import { Function } from "./function.ts";
 import { Profile } from "./profile.ts";
 import { Inputs } from "./inputs";
 import { Functions } from "objectiveai";
-import { ExampleInputSchema } from "./example_input";
+import { ExampleInputSchema } from "./exampleInput";
 import { spawnApiServer, LocalObjectiveAI } from "./apiServer";
 import { writeFileSync, existsSync, unlinkSync } from "fs";
 import { CompiledTasks } from "./objectiveai/objectiveai-js/src/functions/task.js";
