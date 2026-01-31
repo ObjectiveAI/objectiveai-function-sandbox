@@ -7,7 +7,9 @@
     "build": "ts-node test.ts && ts-node build.ts",
     "build-final": "git -C objectiveai checkout . && npm run build",
     "install-rust-logs": "npm run install",
-    "publish": "npm run build && ts-node publish.ts"
+    "publish": "npm run build && ts-node publish.ts",
+    "commit-and-push": "ts-node commitAndPush.ts",
+    "update-sandbox": "ts-node updateSandbox.ts && npm run commit-and-push -- -m \"update sandbox\" --skip-checkout"
   },
   "type": "commonjs",
   "devDependencies": {

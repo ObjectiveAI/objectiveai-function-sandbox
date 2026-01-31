@@ -38,6 +38,11 @@ function getCommitMessage(): string {
   return message;
 }
 
+function shouldSkipCheckout(): boolean {
+  const args = process.argv.slice(2);
+  return args.includes("--skip-checkout");
+}
+
 function checkoutSubmodule(): void {
   console.log("Checking out objectiveai submodule changes...");
   execSync("git -C objectiveai checkout .", { stdio: "inherit" });
@@ -99,9 +104,14 @@ function main(): void {
   // Validate inputs
   validateRepository();
   const commitMessage = getCommitMessage();
+  const skipCheckout = shouldSkipCheckout();
 
-  // Checkout submodule changes
-  checkoutSubmodule();
+  // Checkout submodule changes (unless skipped)
+  if (!skipCheckout) {
+    checkoutSubmodule();
+  } else {
+    console.log("Skipping submodule checkout...");
+  }
 
   // Stage and commit changes
   stageAndCommit(commitMessage);
