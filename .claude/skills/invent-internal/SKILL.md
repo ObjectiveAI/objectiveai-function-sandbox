@@ -165,6 +165,7 @@ This command will:
 - `function.json` - Exported function
 - `profile.json` - Exported profile
 - `serverLog.txt` - Server errors and logs from build
+- `compiledTasks.json` - Compiled tasks for each input from build (useful for debugging JMESPath expressions)
 
 ### Commands
 - `npm run build` - Test and export

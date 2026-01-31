@@ -4,6 +4,8 @@ import { Inputs } from "./inputs";
 import { Functions } from "objectiveai";
 import { ExampleInputSchema } from "./example_input";
 import { spawnApiServer, LocalObjectiveAI } from "./apiServer";
+import { writeFileSync, existsSync, unlinkSync } from "fs";
+import { CompiledTasks } from "./objectiveai/objectiveai-js/src/functions/task.js";
 
 function test(title: string, testFunction: () => void): boolean {
   try {
@@ -140,6 +142,21 @@ async function main(): Promise<void> {
   });
 
   test("Compiled Task Validation", () => {
+    if (existsSync("compiledTasks.json")) {
+      unlinkSync("compiledTasks.json");
+    }
+    const writable: Record<number, CompiledTasks | string> = {};
+    let writableIndex = 1;
+    for (const { value } of Inputs) {
+      try {
+        const compiledTasks = Functions.compileFunctionTasks(Function, value);
+        writable[writableIndex] = compiledTasks;
+      } catch (e) {
+        writable[writableIndex] = `Error: ${(e as Error).message}`;
+      }
+      writableIndex++;
+    }
+    writeFileSync("compiledTasks.json", JSON.stringify(writable, null, 2));
     for (const { value, compiledTasks: expectedCompiledTasks } of Inputs) {
       const compiledTasks = Functions.compileFunctionTasks(Function, value);
       if (compiledTasks.length !== expectedCompiledTasks.length) {
