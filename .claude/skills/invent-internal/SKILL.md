@@ -117,7 +117,17 @@ Tests run a local server from the objectiveai submodule. If tests fail, it is du
 
 ### Debugging with Rust Logging
 
-You can add `println!` or `dbg!` statements in `objectiveai/objectiveai-api/src/...` to debug. These will appear in `serverLog.txt`.
+When errors are unclear or you need deeper insight into what's happening during execution, adding Rust logging is often the fastest path to understanding the problem. Add `println!` or `dbg!` statements to inspect intermediate values, expression evaluations, or task execution flow. Output appears in `serverLog.txt`.
+
+Depending on what you're debugging, you may need to add logging to one or more of:
+- `objectiveai/objectiveai-api/src/...` - Server-side execution and task orchestration
+- `objectiveai/objectiveai-rs/src/...` - Core data structures and validation
+- `objectiveai/objectiveai-rs-wasm-js/src/...` - WASM bindings and client-side compilation
+
+This is especially useful for:
+- Understanding how expressions are being evaluated
+- Seeing the actual data structures at runtime
+- Tracing execution flow through the function pipeline
 
 **IMPORTANT**: After adding Rust logging, you MUST run:
 ```
