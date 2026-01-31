@@ -143,10 +143,13 @@ This resets any modifications to the objectiveai submodule and runs a clean buil
 
 ## Step 6: Publish to GitHub
 
-1. Run `git status` to see changes
-2. Run `git add` to stage files (function.ts, profile.ts, inputs.ts, function.json, profile.json, README.md)
-3. Run `git commit` with a descriptive message
-4. Run `gh repo create {repository-name} --public --source=. --push` using the repository name from function.md
+Run `npm run commit-and-push -- -m "Your commit message here"` with a descriptive commit message.
+
+This command will:
+1. Check out any changes to the objectiveai submodule
+2. Stage all changes and create a commit
+3. Create the GitHub repository (if it doesn't exist) using the name and description from `repository.json`
+4. Push the commit
 
 ---
 
@@ -167,3 +170,4 @@ This resets any modifications to the objectiveai submodule and runs a clean buil
 - `npm run build` - Test and export
 - `npm run build-final` - Reset submodule and do final build
 - `npm run install-rust-logs` - Rebuild after adding Rust logging
+- `npm run commit-and-push -- -m "message"` - Commit and push to GitHub (creates repo if needed)

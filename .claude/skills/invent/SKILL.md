@@ -76,6 +76,12 @@ Write the following to `.claude/plans/function.md`:
 - The input schema design
 - The task structure (what tasks it will use)
 
+### Write Repository Metadata
+
+Edit `repository.json` with:
+- `repository`: The repository name (same as function name)
+- `repositoryDescription`: A brief description of what the function does (for the GitHub repository)
+
 ## Step 7: Activate Implementation
 
 Activate the `/invent-internal` skill to proceed with implementation.
