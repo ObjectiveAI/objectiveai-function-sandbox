@@ -1,5 +1,5 @@
-import { Function } from "./function";
-import { Profile } from "./profile";
+import { Function } from "./function.ts";
+import { Profile } from "./profile.ts";
 import { Inputs } from "./inputs";
 import { Functions } from "objectiveai";
 import { ExampleInputSchema } from "./example_input";

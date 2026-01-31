@@ -11,7 +11,9 @@
   },
   "ts-node": {
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "allowImportingTsExtensions": true,
+      "noEmit": true
     }
   }
 }
