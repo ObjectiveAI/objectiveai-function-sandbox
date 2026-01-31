@@ -1,10 +1,19 @@
 import { execSync } from "child_process";
-import { mkdtempSync, rmSync, readdirSync, statSync, copyFileSync, mkdirSync, existsSync } from "fs";
-import { join, relative } from "path";
+import {
+  mkdtempSync,
+  rmSync,
+  readdirSync,
+  statSync,
+  copyFileSync,
+  mkdirSync,
+  existsSync,
+} from "fs";
+import { join } from "path";
 import { tmpdir } from "os";
 
 // The sandbox repo URL (template repository)
-const SANDBOX_REPO = "https://github.com/AviCrawororth/objectiveai-function-sandbox.git";
+const SANDBOX_REPO =
+  "https://github.com/AviCrawororth/objectiveai-function-sandbox.git";
 
 // Files that should NOT be replaced (user-editable files)
 const PRESERVE_FILES = new Set([
@@ -20,11 +29,7 @@ const PRESERVE_FILES = new Set([
 ]);
 
 // Directories to skip entirely
-const SKIP_DIRECTORIES = new Set([
-  "objectiveai",
-  ".git",
-  "node_modules",
-]);
+const SKIP_DIRECTORIES = new Set(["objectiveai", ".git", "node_modules"]);
 
 function checkoutSubmodule(): void {
   console.log("Checking out objectiveai submodule changes (to clean state)...");
@@ -34,11 +39,17 @@ function checkoutSubmodule(): void {
 function cloneSandbox(): string {
   const tempDir = mkdtempSync(join(tmpdir(), "sandbox-"));
   console.log(`Cloning sandbox repo to ${tempDir}...`);
-  execSync(`git clone --depth 1 ${SANDBOX_REPO} "${tempDir}"`, { stdio: "inherit" });
+  execSync(`git clone --depth 1 ${SANDBOX_REPO} "${tempDir}"`, {
+    stdio: "inherit",
+  });
   return tempDir;
 }
 
-function copyFiles(srcDir: string, destDir: string, basePath: string = ""): void {
+function copyFiles(
+  srcDir: string,
+  destDir: string,
+  basePath: string = "",
+): void {
   const entries = readdirSync(srcDir);
 
   for (const entry of entries) {
