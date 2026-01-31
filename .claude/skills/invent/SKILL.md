@@ -2,6 +2,12 @@
 
 This skill guides you through inventing a new ObjectiveAI Function and Profile pair.
 
+## Execution
+
+**Create a TODO list containing Steps 1-5 and execute them in precise order.**
+
+Do not skip steps. Do not reorder steps. Complete each step before moving to the next.
+
 ## Step 1: Initialize
 
 Run `npm run init`.
