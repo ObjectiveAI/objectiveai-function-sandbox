@@ -135,6 +135,12 @@ async function fetchProfileRecursively(ref: ProfileRef): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  // Skip if examples.json already exists
+  if (existsSync(join("examples", "examples.json"))) {
+    console.log("examples/examples.json already exists, skipping fetch.");
+    return;
+  }
+
   // List all function-profile pairs
   const { data: pairs } = await Functions.listPairs(objectiveai);
   // Randomly select up to 10 pairs

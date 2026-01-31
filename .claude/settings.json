@@ -56,6 +56,7 @@
       "Edit(./init.ts)",
       "Edit(./package-lock.json)",
       "Edit(./package.json)",
+      "Edit(./preInit.js)",
       "Edit(./profile.json)",
       "Edit(./publish.ts)",
       "Edit(./setPort.ts)",
