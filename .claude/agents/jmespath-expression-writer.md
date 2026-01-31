@@ -15,7 +15,7 @@ Use WebFetch to retrieve https://jmespath.org/specification.html
 This provides the complete JMESPath specification and all default functions. Study it carefully.
 
 ### Step 2: Read Custom ObjectiveAI Functions
-Read ./objectiveai/objectiveai-rs/src/expression/runtime.rs
+Read ./objectiveai/objectiveai-rs/src/functions/expression/runtime.rs
 This contains all custom ObjectiveAI JMESPath functions beyond the standard specification. Memorize these extensions.
 
 ### Step 3: Study Examples
