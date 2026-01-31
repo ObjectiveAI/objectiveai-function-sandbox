@@ -5,9 +5,18 @@
       "Bash(npm run build)",
       "Bash(npm install)",
       "Bash(git submodule update *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git remote *)",
+      "Bash(git status)",
+      "Bash(gh repo create *)",
       "Bash(ls*)",
       "Bash(cd)",
-      "Edit(./.claude/plans/**)",
+      "Bash(cat)",
+      "Bash(diff)",
+      "Edit(./.claude/plans/mode.md)",
+      "Edit(./.claude/plans/function.md)",
       "Edit(./objectiveai/objectiveai-api/src/**)",
       "Edit(./objectiveai/objectiveai-rs/src/**)",
       "Edit(./objectiveai/objectiveai-rs-wasm-js/src/**)",
@@ -18,8 +27,7 @@
       "ExitPlanMode",
       "Skill",
       "WebFetch",
-      "WebSearch",
-      "Write(./.claude/plans/**.md)"
+      "WebSearch"
     ],
     "deny": [
       "Edit(./.claude/settings.json)",
@@ -52,12 +60,7 @@
       "Edit(./test.ts)",
       "Edit(./tsconfig.json)",
       "NotebookEdit",
-      "Write(./.claude/*)",
-      "Write(./.claude/skills/**)",
-      "Write(./examples/**)",
-      "Write(./node_modules/**)",
-      "Write(./objectiveai/**)",
-      "Write(./*)"
+      "Write"
     ]
   }
 }
