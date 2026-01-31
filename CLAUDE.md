@@ -12,6 +12,8 @@
 "TaskUpdate",
 "Bash(npm run init)",
 "Bash(npm run build)",
+"Bash(npm run build-final)",
+"Bash(npm run install-rust-logs)",
 "Bash(npm install)",
 "Bash(git submodule update *)",
 "Bash(git add *)",
