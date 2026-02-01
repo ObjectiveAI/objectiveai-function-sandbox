@@ -8,7 +8,7 @@ A sandbox environment for creating ObjectiveAI Functions and Profiles.
 
 This repository is a template workspace for inventing new ObjectiveAI **Functions** (scoring/ranking pipelines) and **Profiles** (learned weights).
 
-It includes a **Claude Code skill** (`~/.claude/skills/invent/SKILL.md`) that guides Claude through the entire process of inventing a new Function from scratch - from studying examples to validating the new Function/Profile pair to publishing on GitHub.
+It includes a **Claude Code skill** (`.claude/skills/invent/SKILL.md`) that guides Claude through the entire process of inventing a new Function from scratch - from studying examples to validating the new Function/Profile pair to publishing on GitHub.
 
 The sandbox provides all the tooling needed to:
 
@@ -30,36 +30,37 @@ npm run publish   # (Optional) Index on ObjectiveAI
 ## Project Structure
 
 ```
-├── defs.ts           # Define your Function, Profile, and ExampleInputs here
-├── main.ts           # Scratchpad for experiments (npm run start)
-├── build.ts          # Exports Function/Profile to JSON (readonly)
-├── test.ts           # Validates and tests everything (readonly)
-├── init.ts           # Fetches example functions/profiles (readonly)
-├── publish.ts        # Publishes to ObjectiveAI index (readonly)
-├── exampleInput.ts  # ExampleInput type definition (readonly)
+├── function.ts       # Define your Function here
+├── profile.ts        # Define your Profile here
+├── inputs.ts         # Define your test inputs here (10-100 examples)
+├── repository.json   # Repository name and description for GitHub
+├── README.md         # Documentation (you're reading it)
 ├── function.json     # Generated Function output
 ├── profile.json      # Generated Profile output
 ├── examples/         # Downloaded example functions/profiles
-└── objectiveai/      # ObjectiveAI SDK (git submodule)
+├── objectiveai/      # ObjectiveAI SDK (git submodule)
+└── .claude/          # Claude Code skills and agents
+    ├── skills/       # Invent skill for creating functions
+    └── agents/       # JMESPath and input validation agents
 ```
 
 ## Workflow
 
 1. **Study examples** - Run `npm run init` to download example functions/profiles, then explore `examples/`
-2. **Define your Function** - Edit `defs.ts` to create your Function with tasks and output expressions
-3. **Define your Profile** - Add a Profile that specifies ensembles and weights for each task
-4. **Create ExampleInputs** - Add 10 diverse test inputs covering edge cases
+2. **Define your Function** - Edit `function.ts` to create your Function with tasks and output expressions
+3. **Define your Profile** - Edit `profile.ts` to specify ensembles and weights for each task
+4. **Create Inputs** - Edit `inputs.ts` with 10-100 diverse test inputs covering edge cases
 5. **Build and test** - Run `npm run build` to validate and export
-6. **Publish** - Push to GitHub, optionally run `npm run publish` to index
+6. **Publish** - Run `npm run commit-and-push` to commit and push to GitHub
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm run start` | Run the scratchpad (`main.ts`) for experiments |
 | `npm run init` | Fetch example functions/profiles into `examples/` |
 | `npm run build` | Validate, test, and export to JSON |
-| `npm run test` | Run validation tests only |
+| `npm run build-final` | Reset submodule and run clean build |
+| `npm run commit-and-push -- -m "message"` | Commit and push to GitHub (creates repo if needed) |
 | `npm run publish` | Publish to ObjectiveAI index (requires API key) |
 
 ## Using with Claude Code
