@@ -13,7 +13,7 @@ import { tmpdir } from "os";
 
 // The sandbox repo URL (template repository)
 const SANDBOX_REPO =
-  "https://github.com/AviCrawororth/objectiveai-function-sandbox.git";
+  "https://github.com/ObjectiveAI/objectiveai-function-sandbox.git";
 
 // Files that should NOT be replaced (user-editable files)
 const PRESERVE_FILES = new Set([
